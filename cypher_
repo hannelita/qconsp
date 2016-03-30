@@ -1,0 +1,16 @@
+CREATE (n:Usina:Hidreletrica { name : 'Itaipu', capacidade : '14000' })
+CREATE (n:Usina:Hidreletrica { name : 'Jupia', capacidade : '1551' })
+CREATE (n:Usina:Hidreletrica { name : 'Ita', capacidade : '1440' })
+CREATE (n:Usina:Hidreletrica { name : 'Foz do Areia', capacidade : '2082' })
+CREATE (n:Cidade { name : 'Sao Paulo', consumo : '14000' })
+CREATE (n:Cidade { name : 'Curitiba', consumo : '5000' })
+CREATE (n:Cidade { name : 'Ivaipora', consumo : '1000' })
+MATCH (a:Hidreletrica),(b:Cidade) WHERE a.name = 'Itaipu' AND b.name = 'Ivaipora' CREATE (a)-[r:FORNECE { capacidade_cabo : 765, rl : 330 }]->(b) RETURN r
+CREATE (n:Cidade { name : 'Cascavel Oeste', consumo : '900' })
+MATCH (a:Hidreletrica),(b:Cidade) WHERE a.name = 'Itaipu' AND b.name = 'Cascavel Oeste' CREATE (a)-[r:FORNECE { capacidade_cabo : 500 }]->(b) RETURN r
+MATCH (a:Cidade),(b:Cidade) WHERE a.name = 'Ivaipora' AND b.name = 'Cascavel Oeste' CREATE (a)-[r:MALHA { capacidade_cabo : 500 }]->(b) RETURN r
+CREATE (n:Concessionaria { name : 'Ficticio', porcentagem : 85, margem : 72 })
+MATCH (a:Concessionaria),(b:Cidade) WHERE a.name = 'Ficticio' AND b.name = 'Cascavel Oeste' CREATE (a)-[r:ATENDE]->(b) RETURN r
+MATCH (a:Concessionaria),(b:Usina) WHERE a.name = 'Ficticio' AND b.name = 'Ita' CREATE (a)-[r:POSSUI]->(b) RETURN r
+CREATE (n:Componente:Transformador { tag : 'F. Iguacu', tipo : 'Terciario', mva : 1650, total : 4 })
+MATCH (a:Transformador),(b:Usina) WHERE a.tag = 'F. Iguacu' AND b.name = 'Itaipu' CREATE (a)-[r:INSTALADO]->(b)
